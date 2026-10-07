@@ -89,7 +89,7 @@ CREATE TABLE oltp.delivery_methods (
 CREATE TABLE oltp.customers (
     customer_id                   INTEGER        PRIMARY KEY,
     customer_name                 VARCHAR        NOT NULL,
-    bill_to_customer_id           INTEGER        NOT NULL REFERENCES oltp.customers (customer_id),
+    bill_to_customer_id           INTEGER        NOT NULL,  -- no FK: self-reference, checked in validation
     customer_category_id          INTEGER        NOT NULL REFERENCES oltp.customer_categories (customer_category_id),
     buying_group_id               INTEGER        REFERENCES oltp.buying_groups (buying_group_id),
     primary_contact_person_id     INTEGER        NOT NULL REFERENCES oltp.people (person_id),
@@ -199,7 +199,7 @@ CREATE TABLE oltp.orders (
     salesperson_person_id          INTEGER    NOT NULL REFERENCES oltp.people (person_id),
     picked_by_person_id            INTEGER    REFERENCES oltp.people (person_id),
     contact_person_id              INTEGER    REFERENCES oltp.people (person_id),
-    backorder_order_id             INTEGER    REFERENCES oltp.orders (order_id),
+    backorder_order_id             INTEGER,  -- no FK: self-reference, checked in validation
     order_date                     DATE       NOT NULL,
     expected_delivery_date         DATE,
     customer_purchase_order_number VARCHAR,
