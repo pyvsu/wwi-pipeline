@@ -190,3 +190,79 @@ CREATE TABLE oltp.stock_item_stock_groups (
     _run_id                    VARCHAR    NOT NULL,
     UNIQUE (stock_item_id, stock_group_id)
 );
+
+-- ---------- Orders ----------
+
+CREATE TABLE oltp.orders (
+    order_id                       INTEGER    PRIMARY KEY,
+    customer_id                    INTEGER    NOT NULL REFERENCES oltp.customers (customer_id),
+    salesperson_person_id          INTEGER    NOT NULL REFERENCES oltp.people (person_id),
+    picked_by_person_id            INTEGER    REFERENCES oltp.people (person_id),
+    contact_person_id              INTEGER    REFERENCES oltp.people (person_id),
+    backorder_order_id             INTEGER    REFERENCES oltp.orders (order_id),
+    order_date                     DATE       NOT NULL,
+    expected_delivery_date         DATE,
+    customer_purchase_order_number VARCHAR,
+    is_undersupply_backordered     BOOLEAN,
+    picking_completed_when         TIMESTAMP,
+    _source_file                   VARCHAR    NOT NULL,
+    _ingested_at                   TIMESTAMP  NOT NULL,
+    _run_id                        VARCHAR    NOT NULL
+);
+
+CREATE TABLE oltp.order_lines (
+    order_line_id          INTEGER        PRIMARY KEY,
+    order_id               INTEGER        NOT NULL REFERENCES oltp.orders (order_id),
+    stock_item_id          INTEGER        NOT NULL REFERENCES oltp.stock_items (stock_item_id),
+    description            VARCHAR,
+    package_type_id        INTEGER        REFERENCES oltp.package_types (package_type_id),
+    quantity               INTEGER        NOT NULL CHECK (quantity > 0),
+    unit_price             DECIMAL(18,2)  CHECK (unit_price >= 0),
+    tax_rate               DECIMAL(18,3)  NOT NULL CHECK (tax_rate >= 0),
+    picked_quantity        INTEGER        CHECK (picked_quantity >= 0),
+    picking_completed_when TIMESTAMP,
+    _source_file           VARCHAR        NOT NULL,
+    _ingested_at           TIMESTAMP      NOT NULL,
+    _run_id                VARCHAR        NOT NULL
+);
+
+-- ---------- Invoices ----------
+
+CREATE TABLE oltp.invoices (
+    invoice_id                     INTEGER    PRIMARY KEY,
+    customer_id                    INTEGER    NOT NULL REFERENCES oltp.customers (customer_id),
+    bill_to_customer_id            INTEGER    NOT NULL REFERENCES oltp.customers (customer_id),
+    order_id                       INTEGER    NOT NULL REFERENCES oltp.orders (order_id),
+    delivery_method_id             INTEGER    REFERENCES oltp.delivery_methods (delivery_method_id),
+    contact_person_id              INTEGER    REFERENCES oltp.people (person_id),
+    accounts_person_id             INTEGER    REFERENCES oltp.people (person_id),
+    salesperson_person_id          INTEGER    NOT NULL REFERENCES oltp.people (person_id),
+    packed_by_person_id            INTEGER    REFERENCES oltp.people (person_id),
+    invoice_date                   DATE       NOT NULL,
+    customer_purchase_order_number VARCHAR,
+    delivery_instructions          VARCHAR,
+    total_dry_items                INTEGER    CHECK (total_dry_items >= 0),
+    total_chiller_items            INTEGER    CHECK (total_chiller_items >= 0),
+    confirmed_delivery_time        TIMESTAMP,
+    confirmed_received_by          VARCHAR,
+    _source_file                   VARCHAR    NOT NULL,
+    _ingested_at                   TIMESTAMP  NOT NULL,
+    _run_id                        VARCHAR    NOT NULL
+);
+
+CREATE TABLE oltp.invoice_lines (
+    invoice_line_id   INTEGER        PRIMARY KEY,
+    invoice_id        INTEGER        NOT NULL REFERENCES oltp.invoices (invoice_id),
+    stock_item_id     INTEGER        NOT NULL REFERENCES oltp.stock_items (stock_item_id),
+    description       VARCHAR,
+    package_type_id   INTEGER        REFERENCES oltp.package_types (package_type_id),
+    quantity          INTEGER        NOT NULL CHECK (quantity > 0),
+    unit_price        DECIMAL(18,2)  CHECK (unit_price >= 0),
+    tax_rate          DECIMAL(18,3)  NOT NULL CHECK (tax_rate >= 0),
+    tax_amount        DECIMAL(18,2)  CHECK (tax_amount >= 0),
+    line_profit       DECIMAL(18,2),
+    extended_price    DECIMAL(18,2)  CHECK (extended_price >= 0),
+    _source_file      VARCHAR        NOT NULL,
+    _ingested_at      TIMESTAMP      NOT NULL,
+    _run_id           VARCHAR        NOT NULL
+);
