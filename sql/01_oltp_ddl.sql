@@ -111,3 +111,82 @@ CREATE TABLE oltp.customers (
     _ingested_at                  TIMESTAMP      NOT NULL,
     _run_id                       VARCHAR        NOT NULL
 );
+
+-- ---------- Product side ----------
+
+CREATE TABLE oltp.colors (
+    color_id       INTEGER    PRIMARY KEY,
+    color_name     VARCHAR    NOT NULL,
+    _source_file   VARCHAR    NOT NULL,
+    _ingested_at   TIMESTAMP  NOT NULL,
+    _run_id        VARCHAR    NOT NULL
+);
+
+CREATE TABLE oltp.package_types (
+    package_type_id    INTEGER    PRIMARY KEY,
+    package_type_name  VARCHAR    NOT NULL,
+    _source_file       VARCHAR    NOT NULL,
+    _ingested_at       TIMESTAMP  NOT NULL,
+    _run_id            VARCHAR    NOT NULL
+);
+
+CREATE TABLE oltp.stock_groups (
+    stock_group_id    INTEGER    PRIMARY KEY,
+    stock_group_name  VARCHAR    NOT NULL,
+    _source_file      VARCHAR    NOT NULL,
+    _ingested_at      TIMESTAMP  NOT NULL,
+    _run_id           VARCHAR    NOT NULL
+);
+
+CREATE TABLE oltp.suppliers (
+    supplier_id                  INTEGER        PRIMARY KEY,
+    supplier_name                VARCHAR        NOT NULL,
+    supplier_category_id         INTEGER,       -- no FK: parent table not loaded
+    primary_contact_person_id    INTEGER        NOT NULL REFERENCES oltp.people (person_id),
+    alternate_contact_person_id  INTEGER        REFERENCES oltp.people (person_id),
+    delivery_method_id           INTEGER        REFERENCES oltp.delivery_methods (delivery_method_id),
+    delivery_city_id             INTEGER        NOT NULL REFERENCES oltp.cities (city_id),
+    postal_city_id               INTEGER        NOT NULL REFERENCES oltp.cities (city_id),
+    supplier_reference           VARCHAR,
+    payment_days                 INTEGER        CHECK (payment_days >= 0),
+    phone_number                 VARCHAR,
+    website_url                  VARCHAR,
+    delivery_address_line        VARCHAR,
+    delivery_location_lat        DECIMAL(9,6)   CHECK (delivery_location_lat  BETWEEN  -90 AND  90),
+    delivery_location_long       DECIMAL(9,6)   CHECK (delivery_location_long BETWEEN -180 AND 180),
+    _source_file                 VARCHAR        NOT NULL,
+    _ingested_at                 TIMESTAMP      NOT NULL,
+    _run_id                      VARCHAR        NOT NULL
+);
+
+CREATE TABLE oltp.stock_items (
+    stock_item_id             INTEGER        PRIMARY KEY,
+    stock_item_name           VARCHAR        NOT NULL,
+    supplier_id               INTEGER        NOT NULL REFERENCES oltp.suppliers (supplier_id),
+    color_id                  INTEGER        REFERENCES oltp.colors (color_id),
+    unit_package_id           INTEGER        NOT NULL REFERENCES oltp.package_types (package_type_id),
+    outer_package_id          INTEGER        NOT NULL REFERENCES oltp.package_types (package_type_id),
+    brand                     VARCHAR,
+    size                      VARCHAR,
+    lead_time_days            INTEGER        CHECK (lead_time_days >= 0),
+    quantity_per_outer        INTEGER        CHECK (quantity_per_outer > 0),
+    is_chiller_stock          BOOLEAN,
+    barcode                   VARCHAR,
+    tax_rate                  DECIMAL(18,3)  CHECK (tax_rate >= 0),
+    unit_price                DECIMAL(18,2)  CHECK (unit_price >= 0),
+    recommended_retail_price  DECIMAL(18,2)  CHECK (recommended_retail_price >= 0),
+    typical_weight_per_unit   DECIMAL(18,3)  CHECK (typical_weight_per_unit >= 0),
+    _source_file              VARCHAR        NOT NULL,
+    _ingested_at              TIMESTAMP      NOT NULL,
+    _run_id                   VARCHAR        NOT NULL
+);
+
+CREATE TABLE oltp.stock_item_stock_groups (
+    stock_item_stock_group_id  INTEGER    PRIMARY KEY,
+    stock_item_id              INTEGER    NOT NULL REFERENCES oltp.stock_items (stock_item_id),
+    stock_group_id             INTEGER    NOT NULL REFERENCES oltp.stock_groups (stock_group_id),
+    _source_file               VARCHAR    NOT NULL,
+    _ingested_at               TIMESTAMP  NOT NULL,
+    _run_id                    VARCHAR    NOT NULL,
+    UNIQUE (stock_item_id, stock_group_id)
+);
