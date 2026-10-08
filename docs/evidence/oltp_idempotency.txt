@@ -1,0 +1,21 @@
+table                          run 1     run 2
+countries                        190       190
+state_provinces                   53        53
+cities                        37,940    37,940
+people                         1,111     1,111
+customer_categories                8         8
+buying_groups                      2         2
+delivery_methods                  10        10
+customers                        663       663
+colors                            36        36
+package_types                     14        14
+suppliers                         13        13
+stock_items                      227       227
+stock_groups                      10        10
+stock_item_stock_groups          442       442
+orders                        73,595    73,595
+order_lines                  231,412   231,412
+invoices                      70,510    70,510
+invoice_lines                228,265   228,265
+
+RESULT: IDENTICAL (idempotent)

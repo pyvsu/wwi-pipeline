@@ -1,0 +1,36 @@
+OLTP validation for run 1e2ff076-64c0-4c45-9344-fc86a448c628
+Primary keys: never NULL (enforced by the PRIMARY KEY constraint)
+
+1. Row counts: CSV = loaded + duplicate + rejected, and loaded = OLTP rows
+table                           csv   loaded   dup   rej     oltp  status
+countries                       190      190     0     0      190  PASS
+state_provinces                  53       53     0     0       53  PASS
+cities                       37,940   37,940     0     0   37,940  PASS
+people                        1,111    1,111     0     0    1,111  PASS
+customer_categories               8        8     0     0        8  PASS
+buying_groups                     2        2     0     0        2  PASS
+delivery_methods                 10       10     0     0       10  PASS
+customers                       663      663     0     0      663  PASS
+colors                           36       36     0     0       36  PASS
+package_types                    14       14     0     0       14  PASS
+suppliers                        13       13     0     0       13  PASS
+stock_items                     227      227     0     0      227  PASS
+stock_groups                     10       10     0     0       10  PASS
+stock_item_stock_groups         442      442     0     0      442  PASS
+orders                       73,595   73,595     0     0   73,595  PASS
+order_lines                 231,412  231,412     0     0  231,412  PASS
+invoices                     70,510   70,510     0     0   70,510  PASS
+invoice_lines               228,265  228,265     0     0  228,265  PASS
+
+2. Relationship and business checks (bad rows should be 0)
+PASS  customers.bill_to_customer_id points to a real customer  (bad rows: 0)
+PASS  orders.backorder_order_id points to a real order  (bad rows: 0)
+PASS  (order_id, stock_item_id) is unique in order_lines  (bad rows: 0)
+PASS  order salespeople exist in people as employees  (bad rows: 0)
+PASS  invoice salespeople exist in people as employees  (bad rows: 0)
+PASS  invoice_lines.tax_amount = quantity x unit_price x tax_rate / 100  (bad rows: 0)
+
+3. Values rejected during type conversion (originals kept in etl.rejected_rows)
+none
+
+RESULT: PASS
