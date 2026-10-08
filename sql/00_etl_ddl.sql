@@ -35,3 +35,12 @@ CREATE TABLE IF NOT EXISTS etl.rejected_rows (
     reason          VARCHAR,
     rejected_at     TIMESTAMP  NOT NULL
 );
+CREATE TABLE IF NOT EXISTS etl.dq_results (
+    run_id         VARCHAR    NOT NULL,
+    check_name     VARCHAR    NOT NULL,
+    severity       VARCHAR    NOT NULL CHECK (severity IN ('CRITICAL', 'WARNING')),
+    bad_row_count  INTEGER    NOT NULL,
+    status         VARCHAR    NOT NULL CHECK (status IN ('PASS', 'FAIL')),
+    checked_at     TIMESTAMP  NOT NULL,
+    PRIMARY KEY (run_id, check_name)
+);
