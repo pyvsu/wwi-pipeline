@@ -46,3 +46,69 @@ WHERE invoice_date_key = -1
 SELECT COUNT(*)
 FROM dw.fact_sale
 WHERE delivery_date_key = -1;
+
+-- name: dim_customer_one_current_row_per_customer
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM (
+    SELECT customer_id
+    FROM dw.dim_customer
+    WHERE customer_key <> -1
+    GROUP BY customer_id
+    HAVING COUNT(*) FILTER (WHERE is_current) <> 1
+);
+
+-- name: dim_customer_no_overlapping_ranges
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM dw.dim_customer AS a
+INNER JOIN dw.dim_customer AS b
+        ON a.customer_id  = b.customer_id
+       AND a.customer_key < b.customer_key
+       AND a.effective_from <= b.effective_to
+       AND b.effective_from <= a.effective_to
+WHERE a.customer_key <> -1;
+
+-- name: dim_city_business_key_unique
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM (
+    SELECT city_id
+    FROM dw.dim_city
+    WHERE city_key <> -1
+    GROUP BY city_id
+    HAVING COUNT(*) > 1
+);
+
+-- name: dim_employee_business_key_unique
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM (
+    SELECT person_id
+    FROM dw.dim_employee
+    WHERE employee_key <> -1
+    GROUP BY person_id
+    HAVING COUNT(*) > 1
+);
+
+-- name: dim_stock_item_business_key_unique
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM (
+    SELECT stock_item_id
+    FROM dw.dim_stock_item
+    WHERE stock_item_key <> -1
+    GROUP BY stock_item_id
+    HAVING COUNT(*) > 1
+);
+
+-- name: dim_date_full_date_unique
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM (
+    SELECT full_date
+    FROM dw.dim_date
+    WHERE date_key <> -1
+    GROUP BY full_date
+    HAVING COUNT(*) > 1
+);
