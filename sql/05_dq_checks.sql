@@ -172,3 +172,15 @@ WHERE days_order_to_invoice    < 0
 SELECT COUNT(*)
 FROM dw.fact_sale
 WHERE days_order_to_invoice > 365;
+
+-- name: dim_customer_no_duplicate_versions
+-- severity: CRITICAL
+SELECT COUNT(*)
+FROM (
+    SELECT
+        row_hash,
+        LAG(row_hash) OVER (PARTITION BY customer_id ORDER BY effective_from) AS previous_hash
+    FROM dw.dim_customer
+    WHERE customer_key <> -1
+)
+WHERE row_hash = previous_hash;
