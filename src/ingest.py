@@ -29,8 +29,17 @@ LOAD_ORDER = [
 ]
 
 
-def csv_path(source: str) -> str:
-    """'Sales.Orders' -> 'data/raw/Sales/Sales.Orders.csv'"""
+# Batch 2 replaces some source files with a changed copy (SCD2 demo)
+BATCH2_FILES = {
+    "Sales.Customers": Path("data/batch2/customers_batch2.csv"),
+}
+
+
+def csv_path(source: str, batch_id: int = 1) -> str:
+    """'Sales.Orders' -> 'data/raw/Sales/Sales.Orders.csv'
+    In batch 2, sources listed in BATCH2_FILES come from data/batch2/ instead."""
+    if batch_id == 2 and source in BATCH2_FILES:
+        return str(BATCH2_FILES[source])
     schema = source.split(".")[0]
     return str(RAW_DIR / schema / f"{source}.csv")
 
@@ -185,9 +194,9 @@ def end_run(con, run_id: str, status: str, error_message: str = None) -> None:
     )
 
 
-def load_table(con, run_id: str, source: str, table: str) -> dict:
+def load_table(con, run_id: str, source: str, table: str, batch_id: int = 1) -> dict:
     """Load one CSV into one oltp table, in one transaction."""
-    path = csv_path(source)
+    path = csv_path(source, batch_id)
     source_file = Path(path).name
     typed_sql = build_typed_select(con, table, path)
     cols = ", ".join(name for name, _ in get_target_columns(con, table))
@@ -256,10 +265,10 @@ def load_table(con, run_id: str, source: str, table: str) -> dict:
         raise
 
 
-def ingest_all(con, run_id: str) -> None:
+def ingest_all(con, run_id: str, batch_id: int = 1) -> None:
     """Load every table in LOAD_ORDER and print one line per table."""
     for source, table in LOAD_ORDER:
-        s = load_table(con, run_id, source, table)
+        s = load_table(con, run_id, source, table, batch_id)
         print(
             f"{table:<26}"
             f"read={s['rows_read']:>8,}  loaded={s['rows_loaded']:>8,}  "
