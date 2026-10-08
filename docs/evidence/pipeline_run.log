@@ -1,0 +1,247 @@
+2026-10-09 04:13:26 | INFO    | ======================================================================
+2026-10-09 04:13:26 | INFO    | PIPELINE START run_id=201c2a88-a7fe-49bf-828a-9a631ed06b6d batch=1 effective_date=None
+2026-10-09 04:13:26 | INFO    | STEP 1/9 START  Validate source files
+2026-10-09 04:13:26 | INFO    |   all 18 source files found
+2026-10-09 04:13:26 | INFO    | STEP 1/9 DONE   Validate source files (0.0s)
+2026-10-09 04:13:26 | INFO    | STEP 2/9 START  Prepare OLTP schema
+2026-10-09 04:13:26 | INFO    | STEP 2/9 DONE   Prepare OLTP schema (0.0s)
+2026-10-09 04:13:26 | INFO    | STEP 3/9 START  Ingest CSVs into OLTP
+2026-10-09 04:13:34 | INFO    |   countries                 read=     190  loaded=     190  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   state_provinces           read=      53  loaded=      53  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   cities                    read=  37,940  loaded=  37,940  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   people                    read=   1,111  loaded=   1,111  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   customer_categories       read=       8  loaded=       8  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   buying_groups             read=       2  loaded=       2  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   delivery_methods          read=      10  loaded=      10  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   customers                 read=     663  loaded=     663  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   colors                    read=      36  loaded=      36  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   package_types             read=      14  loaded=      14  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   suppliers                 read=      13  loaded=      13  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   stock_items               read=     227  loaded=     227  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   stock_groups              read=      10  loaded=      10  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   stock_item_stock_groups   read=     442  loaded=     442  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   orders                    read=  73,595  loaded=  73,595  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   order_lines               read= 231,412  loaded= 231,412  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   invoices                  read=  70,510  loaded=  70,510  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    |   invoice_lines             read= 228,265  loaded= 228,265  dup=   0  rejected=   0
+2026-10-09 04:13:34 | INFO    | STEP 3/9 DONE   Ingest CSVs into OLTP (8.2s)
+2026-10-09 04:13:34 | INFO    | STEP 4/9 START  Validate OLTP load
+2026-10-09 04:13:34 | INFO    |   18 tables reconcile: read = loaded + duplicate + rejected
+2026-10-09 04:13:34 | INFO    | STEP 4/9 DONE   Validate OLTP load (0.0s)
+2026-10-09 04:13:34 | INFO    | STEP 5/9 START  Prepare OLAP schemas and staging
+2026-10-09 04:13:34 | INFO    |   batch 1: dropped dw and staging for a fresh build
+2026-10-09 04:13:34 | INFO    | STEP 5/9 DONE   Prepare OLAP schemas and staging (0.0s)
+2026-10-09 04:13:34 | INFO    | STEP 6/9 START  Load dimensions (incl. SCD2)
+2026-10-09 04:13:34 | INFO    |   loaded 03_dim_date
+2026-10-09 04:13:34 | INFO    |   loaded 03_dim_city
+2026-10-09 04:13:34 | INFO    |   loaded 03_dim_employee
+2026-10-09 04:13:34 | INFO    |   loaded 03_dim_stock_item
+2026-10-09 04:13:34 | INFO    |   loaded 03_bridge_stock_item_group
+2026-10-09 04:13:34 | INFO    |   dim_customer (SCD2): 664 rows, 664 current
+2026-10-09 04:13:34 | INFO    | STEP 6/9 DONE   Load dimensions (incl. SCD2) (0.1s)
+2026-10-09 04:13:34 | INFO    | STEP 7/9 START  Load facts
+2026-10-09 04:13:34 | INFO    |   fact_order: 231,412 rows loaded
+2026-10-09 04:13:34 | INFO    |   fact_sale: 228,265 rows loaded
+2026-10-09 04:13:34 | INFO    | STEP 7/9 DONE   Load facts (0.4s)
+2026-10-09 04:13:34 | INFO    | STEP 8/9 START  Final data quality checks
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_order_rowcount_matches_oltp            bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_sale_rowcount_matches_oltp             bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_order_no_unknown_keys                  bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_sale_no_unknown_keys                   bad rows: 0
+2026-10-09 04:13:35 | INFO    |   FAIL  WARNING   fact_sale_delivery_date_known               bad rows: 284
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_customer_one_current_row_per_customer   bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_customer_no_overlapping_ranges          bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_city_business_key_unique                bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_employee_business_key_unique            bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_stock_item_business_key_unique          bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_date_full_date_unique                   bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dw_surrogate_keys_not_null                  bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  oltp_customers_bill_to_valid                bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  oltp_orders_backorder_valid                 bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_order_valid_measures                   bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_sale_valid_measures                    bad rows: 0
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  fact_sale_dates_in_sequence                 bad rows: 0
+2026-10-09 04:13:35 | INFO    |   FAIL  WARNING   fact_sale_order_to_invoice_over_365_days    bad rows: 167
+2026-10-09 04:13:35 | INFO    |   PASS  CRITICAL  dim_customer_no_duplicate_versions          bad rows: 0
+2026-10-09 04:13:35 | WARNING |   WARNING checks failed (run continues): fact_sale_delivery_date_known, fact_sale_order_to_invoice_over_365_days
+2026-10-09 04:13:35 | INFO    | STEP 8/9 DONE   Final data quality checks (0.1s)
+2026-10-09 04:13:35 | INFO    | STEP 9/9 START  Write pipeline result
+2026-10-09 04:13:35 | INFO    |   rows oltp.customers                       663
+2026-10-09 04:13:35 | INFO    |   rows oltp.orders                       73,595
+2026-10-09 04:13:35 | INFO    |   rows oltp.order_lines                 231,412
+2026-10-09 04:13:35 | INFO    |   rows oltp.invoices                     70,510
+2026-10-09 04:13:35 | INFO    |   rows oltp.invoice_lines               228,265
+2026-10-09 04:13:35 | INFO    |   rows dw.dim_date                        1,462
+2026-10-09 04:13:35 | INFO    |   rows dw.dim_city                       37,941
+2026-10-09 04:13:35 | INFO    |   rows dw.dim_customer                      664
+2026-10-09 04:13:35 | INFO    |   rows dw.dim_employee                       20
+2026-10-09 04:13:35 | INFO    |   rows dw.dim_stock_item                    228
+2026-10-09 04:13:35 | INFO    |   rows dw.bridge_stock_item_group           442
+2026-10-09 04:13:35 | INFO    |   rows dw.fact_order                    231,412
+2026-10-09 04:13:35 | INFO    |   rows dw.fact_sale                     228,265
+2026-10-09 04:13:35 | INFO    | STEP 9/9 DONE   Write pipeline result (0.0s)
+2026-10-09 04:13:35 | INFO    | PIPELINE SUCCESS run_id=201c2a88-a7fe-49bf-828a-9a631ed06b6d
+2026-10-09 04:13:35 | INFO    | ======================================================================
+2026-10-09 04:13:35 | INFO    | PIPELINE START run_id=446cd379-d88f-4957-85e0-13c42ff32666 batch=2 effective_date=2015-01-01
+2026-10-09 04:13:35 | INFO    | STEP 1/9 START  Validate source files
+2026-10-09 04:13:35 | INFO    |   all 18 source files found
+2026-10-09 04:13:35 | INFO    | STEP 1/9 DONE   Validate source files (0.0s)
+2026-10-09 04:13:35 | INFO    | STEP 2/9 START  Prepare OLTP schema
+2026-10-09 04:13:35 | INFO    | STEP 2/9 DONE   Prepare OLTP schema (0.0s)
+2026-10-09 04:13:35 | INFO    | STEP 3/9 START  Ingest CSVs into OLTP
+2026-10-09 04:13:45 | INFO    |   countries                 read=     190  loaded=     190  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   state_provinces           read=      53  loaded=      53  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   cities                    read=  37,940  loaded=  37,940  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   people                    read=   1,111  loaded=   1,111  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   customer_categories       read=       8  loaded=       8  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   buying_groups             read=       2  loaded=       2  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   delivery_methods          read=      10  loaded=      10  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   customers                 read=     663  loaded=     663  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   colors                    read=      36  loaded=      36  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   package_types             read=      14  loaded=      14  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   suppliers                 read=      13  loaded=      13  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   stock_items               read=     227  loaded=     227  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   stock_groups              read=      10  loaded=      10  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   stock_item_stock_groups   read=     442  loaded=     442  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   orders                    read=  73,595  loaded=  73,595  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   order_lines               read= 231,412  loaded= 231,412  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   invoices                  read=  70,510  loaded=  70,510  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    |   invoice_lines             read= 228,265  loaded= 228,265  dup=   0  rejected=   0
+2026-10-09 04:13:45 | INFO    | STEP 3/9 DONE   Ingest CSVs into OLTP (9.1s)
+2026-10-09 04:13:45 | INFO    | STEP 4/9 START  Validate OLTP load
+2026-10-09 04:13:45 | INFO    |   18 tables reconcile: read = loaded + duplicate + rejected
+2026-10-09 04:13:45 | INFO    | STEP 4/9 DONE   Validate OLTP load (0.0s)
+2026-10-09 04:13:45 | INFO    | STEP 5/9 START  Prepare OLAP schemas and staging
+2026-10-09 04:13:45 | INFO    | STEP 5/9 DONE   Prepare OLAP schemas and staging (0.0s)
+2026-10-09 04:13:45 | INFO    | STEP 6/9 START  Load dimensions (incl. SCD2)
+2026-10-09 04:13:45 | INFO    |   loaded 03_dim_date
+2026-10-09 04:13:45 | INFO    |   loaded 03_dim_city
+2026-10-09 04:13:45 | INFO    |   loaded 03_dim_employee
+2026-10-09 04:13:45 | INFO    |   loaded 03_dim_stock_item
+2026-10-09 04:13:45 | INFO    |   loaded 03_bridge_stock_item_group
+2026-10-09 04:13:45 | INFO    |   dim_customer (SCD2): 668 rows, 664 current
+2026-10-09 04:13:45 | INFO    | STEP 6/9 DONE   Load dimensions (incl. SCD2) (0.3s)
+2026-10-09 04:13:45 | INFO    | STEP 7/9 START  Load facts
+2026-10-09 04:13:46 | INFO    |   fact_order: 231,412 rows loaded
+2026-10-09 04:13:48 | INFO    |   fact_sale: 228,265 rows loaded
+2026-10-09 04:13:48 | INFO    | STEP 7/9 DONE   Load facts (3.1s)
+2026-10-09 04:13:48 | INFO    | STEP 8/9 START  Final data quality checks
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_order_rowcount_matches_oltp            bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_sale_rowcount_matches_oltp             bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_order_no_unknown_keys                  bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_sale_no_unknown_keys                   bad rows: 0
+2026-10-09 04:13:48 | INFO    |   FAIL  WARNING   fact_sale_delivery_date_known               bad rows: 284
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_customer_one_current_row_per_customer   bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_customer_no_overlapping_ranges          bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_city_business_key_unique                bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_employee_business_key_unique            bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_stock_item_business_key_unique          bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_date_full_date_unique                   bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dw_surrogate_keys_not_null                  bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  oltp_customers_bill_to_valid                bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  oltp_orders_backorder_valid                 bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_order_valid_measures                   bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_sale_valid_measures                    bad rows: 0
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  fact_sale_dates_in_sequence                 bad rows: 0
+2026-10-09 04:13:48 | INFO    |   FAIL  WARNING   fact_sale_order_to_invoice_over_365_days    bad rows: 167
+2026-10-09 04:13:48 | INFO    |   PASS  CRITICAL  dim_customer_no_duplicate_versions          bad rows: 0
+2026-10-09 04:13:48 | WARNING |   WARNING checks failed (run continues): fact_sale_delivery_date_known, fact_sale_order_to_invoice_over_365_days
+2026-10-09 04:13:48 | INFO    | STEP 8/9 DONE   Final data quality checks (0.1s)
+2026-10-09 04:13:48 | INFO    | STEP 9/9 START  Write pipeline result
+2026-10-09 04:13:48 | INFO    |   rows oltp.customers                       663
+2026-10-09 04:13:48 | INFO    |   rows oltp.orders                       73,595
+2026-10-09 04:13:48 | INFO    |   rows oltp.order_lines                 231,412
+2026-10-09 04:13:48 | INFO    |   rows oltp.invoices                     70,510
+2026-10-09 04:13:48 | INFO    |   rows oltp.invoice_lines               228,265
+2026-10-09 04:13:48 | INFO    |   rows dw.dim_date                        1,462
+2026-10-09 04:13:48 | INFO    |   rows dw.dim_city                       37,941
+2026-10-09 04:13:48 | INFO    |   rows dw.dim_customer                      668
+2026-10-09 04:13:48 | INFO    |   rows dw.dim_employee                       20
+2026-10-09 04:13:48 | INFO    |   rows dw.dim_stock_item                    228
+2026-10-09 04:13:48 | INFO    |   rows dw.bridge_stock_item_group           442
+2026-10-09 04:13:48 | INFO    |   rows dw.fact_order                    231,412
+2026-10-09 04:13:48 | INFO    |   rows dw.fact_sale                     228,265
+2026-10-09 04:13:48 | INFO    | STEP 9/9 DONE   Write pipeline result (0.0s)
+2026-10-09 04:13:48 | INFO    | PIPELINE SUCCESS run_id=446cd379-d88f-4957-85e0-13c42ff32666
+2026-10-09 04:13:49 | INFO    | ======================================================================
+2026-10-09 04:13:49 | INFO    | PIPELINE START run_id=6da4c8c0-5a7b-410d-9df5-5b4b3a4b28b0 batch=2 effective_date=2015-01-01
+2026-10-09 04:13:49 | INFO    | STEP 1/9 START  Validate source files
+2026-10-09 04:13:49 | INFO    |   all 18 source files found
+2026-10-09 04:13:49 | INFO    | STEP 1/9 DONE   Validate source files (0.0s)
+2026-10-09 04:13:49 | INFO    | STEP 2/9 START  Prepare OLTP schema
+2026-10-09 04:13:49 | INFO    | STEP 2/9 DONE   Prepare OLTP schema (0.1s)
+2026-10-09 04:13:49 | INFO    | STEP 3/9 START  Ingest CSVs into OLTP
+2026-10-09 04:14:03 | INFO    |   countries                 read=     190  loaded=     190  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   state_provinces           read=      53  loaded=      53  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   cities                    read=  37,940  loaded=  37,940  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   people                    read=   1,111  loaded=   1,111  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   customer_categories       read=       8  loaded=       8  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   buying_groups             read=       2  loaded=       2  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   delivery_methods          read=      10  loaded=      10  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   customers                 read=     663  loaded=     663  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   colors                    read=      36  loaded=      36  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   package_types             read=      14  loaded=      14  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   suppliers                 read=      13  loaded=      13  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   stock_items               read=     227  loaded=     227  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   stock_groups              read=      10  loaded=      10  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   stock_item_stock_groups   read=     442  loaded=     442  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   orders                    read=  73,595  loaded=  73,595  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   order_lines               read= 231,412  loaded= 231,412  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   invoices                  read=  70,510  loaded=  70,510  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    |   invoice_lines             read= 228,265  loaded= 228,265  dup=   0  rejected=   0
+2026-10-09 04:14:03 | INFO    | STEP 3/9 DONE   Ingest CSVs into OLTP (13.5s)
+2026-10-09 04:14:03 | INFO    | STEP 4/9 START  Validate OLTP load
+2026-10-09 04:14:03 | INFO    |   18 tables reconcile: read = loaded + duplicate + rejected
+2026-10-09 04:14:03 | INFO    | STEP 4/9 DONE   Validate OLTP load (0.0s)
+2026-10-09 04:14:03 | INFO    | STEP 5/9 START  Prepare OLAP schemas and staging
+2026-10-09 04:14:03 | INFO    | STEP 5/9 DONE   Prepare OLAP schemas and staging (0.0s)
+2026-10-09 04:14:03 | INFO    | STEP 6/9 START  Load dimensions (incl. SCD2)
+2026-10-09 04:14:03 | INFO    |   loaded 03_dim_date
+2026-10-09 04:14:03 | INFO    |   loaded 03_dim_city
+2026-10-09 04:14:03 | INFO    |   loaded 03_dim_employee
+2026-10-09 04:14:03 | INFO    |   loaded 03_dim_stock_item
+2026-10-09 04:14:03 | INFO    |   loaded 03_bridge_stock_item_group
+2026-10-09 04:14:03 | INFO    |   dim_customer (SCD2): 668 rows, 664 current
+2026-10-09 04:14:03 | INFO    | STEP 6/9 DONE   Load dimensions (incl. SCD2) (0.4s)
+2026-10-09 04:14:03 | INFO    | STEP 7/9 START  Load facts
+2026-10-09 04:14:05 | INFO    |   fact_order: 231,412 rows loaded
+2026-10-09 04:14:06 | INFO    |   fact_sale: 228,265 rows loaded
+2026-10-09 04:14:06 | INFO    | STEP 7/9 DONE   Load facts (3.0s)
+2026-10-09 04:14:06 | INFO    | STEP 8/9 START  Final data quality checks
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_order_rowcount_matches_oltp            bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_sale_rowcount_matches_oltp             bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_order_no_unknown_keys                  bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_sale_no_unknown_keys                   bad rows: 0
+2026-10-09 04:14:06 | INFO    |   FAIL  WARNING   fact_sale_delivery_date_known               bad rows: 284
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_customer_one_current_row_per_customer   bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_customer_no_overlapping_ranges          bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_city_business_key_unique                bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_employee_business_key_unique            bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_stock_item_business_key_unique          bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_date_full_date_unique                   bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dw_surrogate_keys_not_null                  bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  oltp_customers_bill_to_valid                bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  oltp_orders_backorder_valid                 bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_order_valid_measures                   bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_sale_valid_measures                    bad rows: 0
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  fact_sale_dates_in_sequence                 bad rows: 0
+2026-10-09 04:14:06 | INFO    |   FAIL  WARNING   fact_sale_order_to_invoice_over_365_days    bad rows: 167
+2026-10-09 04:14:06 | INFO    |   PASS  CRITICAL  dim_customer_no_duplicate_versions          bad rows: 0
+2026-10-09 04:14:06 | WARNING |   WARNING checks failed (run continues): fact_sale_delivery_date_known, fact_sale_order_to_invoice_over_365_days
+2026-10-09 04:14:06 | INFO    | STEP 8/9 DONE   Final data quality checks (0.1s)
+2026-10-09 04:14:06 | INFO    | STEP 9/9 START  Write pipeline result
+2026-10-09 04:14:06 | INFO    |   rows oltp.customers                       663
+2026-10-09 04:14:06 | INFO    |   rows oltp.orders                       73,595
+2026-10-09 04:14:06 | INFO    |   rows oltp.order_lines                 231,412
+2026-10-09 04:14:06 | INFO    |   rows oltp.invoices                     70,510
+2026-10-09 04:14:06 | INFO    |   rows oltp.invoice_lines               228,265
+2026-10-09 04:14:06 | INFO    |   rows dw.dim_date                        1,462
+2026-10-09 04:14:06 | INFO    |   rows dw.dim_city                       37,941
+2026-10-09 04:14:06 | INFO    |   rows dw.dim_customer                      668
+2026-10-09 04:14:06 | INFO    |   rows dw.dim_employee                       20
+2026-10-09 04:14:06 | INFO    |   rows dw.dim_stock_item                    228
+2026-10-09 04:14:06 | INFO    |   rows dw.bridge_stock_item_group           442
+2026-10-09 04:14:06 | INFO    |   rows dw.fact_order                    231,412
+2026-10-09 04:14:06 | INFO    |   rows dw.fact_sale                     228,265
+2026-10-09 04:14:06 | INFO    | STEP 9/9 DONE   Write pipeline result (0.0s)
+2026-10-09 04:14:06 | INFO    | PIPELINE SUCCESS run_id=6da4c8c0-5a7b-410d-9df5-5b4b3a4b28b0
