@@ -1,0 +1,7 @@
+measure                                    run 1             run 2
+fact_order rows                          231,412           231,412
+fact_order amount incl tax        204,222,314.42    204,222,314.42
+fact_sale rows                           228,265           228,265
+fact_sale amount incl tax         198,043,439.45    198,043,439.45
+
+RESULT: IDENTICAL (idempotent)
